@@ -1,0 +1,174 @@
+---
+title: "upset-plot-R"
+output: html_notebook
+date: January 18, 2023
+author: Slinky Linc
+---
+# Load the UpsetR library
+```{r}
+library(UpSetR)
+#library(ggplot2)
+```
+
+# Read in the two example dataframes from the UpsetR package
+```{r}
+movies <- read.csv( system.file("extdata", "movies.csv", package = "UpSetR"), header=T, sep=";" )
+mutations <- read.csv( system.file("extdata", "mutations.csv", package = "UpSetR"), header=T, sep = ",")
+```
+
+# Read in my peptide quants upset dataframe
+```{r}
+quants <- read.csv("~/Desktop/upset_df_full.csv", sep=",")
+# replace the column names
+colnames(quants) <- c("Unimputed", "NMF", "kNN", "missForest", "Sample min", "Gaussian sample")
+```
+
+# Take a look at an example
+```{r}
+#upset(mutations, sets = c("PTEN", "TP53", "EGFR", "PIK3R1", "RB1"), sets.bar.color = "#56B4E9",
+#order.by = "freq", empty.intersections = "on")
+```
+
+# Try on my data
+```{r}
+#upset(quants, sets=c("Unimputed", "NMF", "kNN", "mf", "min", "std"), sets.bar.color = "#56B4E9", #order.by = "freq", text.scale = 1.3, point.size = 2.5, show.numbers=FALSE)
+```
+
+# Something slightly different
+```{r}
+# text.scale arguments
+# c(intersection size title, intersection size tick labels, set size title, set size tick labels, set names, numbers above bars)
+
+upset(
+  quants,
+  sets=c("Unimputed", "NMF", "kNN", "missForest", "Sample min", "Gaussian sample"),
+  sets.bar.color= "#56B4E9", 
+  order.by = "freq", 
+  #text.scale = 1.2, 
+  point.size = 3.2, 
+  show.numbers = FALSE, 
+  sets.x.label="n quant peptides", 
+  text.scale=c(1.7, 1.7, 1.5, 1.0, 1.8, 1.0),
+)
+```
+# Trying to color specific intersection bars
+```{r}
+# text.scale arguments
+# c(intersection size title, intersection size tick labels, set size title, set size tick labels, set names, numbers above bars)
+
+# An example
+#upset(
+#  movies, 
+#  queries = list(list(query = intersects, params = list("Drama", 
+#    "Comedy", "Action"), color = "orange", active = T), 
+#    list(query = intersects, params = list("Drama"), color = "red", active = F), 
+#    list(query = intersects, params = list("Action", "Drama"), active = T)
+#  )
+#)
+
+queries = list(query=intersects, params=list("Unimputed", "mf"), active=T)
+
+pdf(file="~/Desktop/upset-tester.pdf")
+upset(
+  quants,
+  sets=c("Unimputed", "NMF", "kNN", "missForest", "Sample min", "Gaussian sample"),
+  sets.bar.color= "grey23",
+  matrix.color = "#1f77b4",
+  order.by = "freq", 
+  #text.scale = 1.2,
+  query.legend = "top",
+  point.size = 3.2, 
+  show.numbers = FALSE, 
+  sets.x.label="n quant peptides", 
+  text.scale=c(1.7, 1.7, 1.5, 1.0, 1.8, 1.0),
+  queries = list(list(query=intersects, params=list("Unimputed","missForest"), active=T, color="#ff7f0e", query.name="Original quantitative peptides"),
+            list(query=intersects, params=list("Unimputed","missForest","NMF"), active=T, color="#1f77b4", query.name="Imputed quantitative peptides")
+            )
+)
+dev.off()
+```
+
+# Full Upset plot with separate colors for contained by orig and not
+```{r}
+# text.scale arguments
+# c(intersection size title, intersection size tick labels, set size title, set size tick labels, set names, numbers above bars)
+
+# An example
+#upset(
+#  movies, 
+#  queries = list(list(query = intersects, params = list("Drama", 
+#    "Comedy", "Action"), color = "orange", active = T), 
+#    list(query = intersects, params = list("Drama"), color = "red", active = F), 
+#    list(query = intersects, params = list("Action", "Drama"), active = T)
+#  )
+#)
+
+queries = list(query=intersects, params=list("orig", "missForest"), active=T)
+
+pdf(file="~/Desktop/rescue-expr-upsetR-5.pdf", height=5.5, width=8)
+upset(
+  quants,
+  sets=c("Unimputed", "NMF", "kNN", "missForest", "Sample min", "Gaussian sample"),
+  sets.bar.color= "grey23",
+  matrix.color = "#1f77b4",
+  order.by = "freq", 
+  #text.scale = 1.2, 
+  point.size = 3.2, 
+  show.numbers = FALSE, 
+  sets.x.label="# of quant peptides", 
+  text.scale=c(1.7, 1.7, 1.5, 1.0, 1.8, 1.0),
+  main.bar.color = "#1f77b4",
+  #query.legend = "top",
+  queries = list(list(query=intersects, params=list("Unimputed","missForest"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","NMF"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","NMF","kNN","Sample min","Gaussian sample"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","kNN"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","NMF","kNN"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","kNN","Sample min","Gaussian sample"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","NMF","kNN","Sample min"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","NMF","kNN","Gaussian sample"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","NMF","Sample min","Gaussian sample"), active=T, color="#ff7f0e"), 
+                 list(query=intersects, params=list("Unimputed","missForest","kNN","Sample min"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","kNN","Gaussian sample"), active=T, color="#ff7f0e"), 
+                 list(query=intersects, params=list("Unimputed","NMF"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","Sample min","Gaussian sample"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","kNN"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","NMF","Sample min"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","Sample min"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","NMF","Sample min","Gaussian sample"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","Sample min","Gaussian sample"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","NMF","Gaussian sample"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","NMF","kNN","Sample min","Gaussian sample"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","missForest","Gaussian sample"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","NMF","kNN"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","kNN","Sample min","Gaussian sample"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","kNN","Sample min"), active=T, color="#ff7f0e"),
+                 list(query=intersects, params=list("Unimputed","Sample min"), active=T, color="#ff7f0e")
+  )
+)
+dev.off()
+```
+
+# Save
+```{r}
+# text.scale arguments
+# c(intersection size title, intersection size tick labels, set size title, set size tick labels, set names, numbers above bars)
+
+#pdf(file="~/Desktop/rescue-expr-upsetR.pdf")
+#pdf(file="~/Desktop/rescue-expr-full-upsetR.pdf")
+
+#upset(
+#  quants,
+#  sets=c("Unimputed", "NMF", "kNN", "mf", "min", "std"),
+#  sets.bar.color= "#56B4E9", 
+#  order.by = "freq", 
+#  #text.scale = 1.2, 
+#  point.size = 3.2, 
+#  show.numbers = FALSE, 
+#  sets.x.label="n quant peptides", 
+#  text.scale=c(1.7, 1.7, 1.5, 1.0, 1.8, 1.0),
+#)
+
+#dev.off()
+```

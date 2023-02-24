@@ -1,0 +1,629 @@
+% Review of the missingness problem in mass spectrometry-based proteomics
+@article{Bramer:review,
+  title={{A review of imputation strategies for isobaric labeling-based shotgun proteomics}},
+  author={Bramer L and Irvahn J and Piehowski P and Rodland K and Webb-Robertson BJ},
+  journal={Journal of Proteome Research},
+  year={2021},
+  volume = {20},
+  pages = {1-13},
+}
+
+% Review of the missingness problem in mass spectrometry-based proteomics
+@article{Webb-Robertson:review,
+  title={{Review, evaluation and discussion of challenges of missing value imputation for mass spectrometry-based label-free global proteomics}},
+  author={Webb-Robertson BJ and Wiberg H and Matzke M and Brown J and Wang J and McDermott J and Smith R and Rodland K and Metz T and Pounds J and Waters K},
+  journal={Journal of Proteome Research},
+  year={2015},
+  volume = {14},
+  pages = {1993-2001},
+}
+
+% An ensemble of many different imputation strategies. Attempts to learn the pattern of missingness in the data, then pick the best performing imputation method for the data. 
+@article{DIMA,
+  title={{DIMA: Data-driven selection of an imputation algorithm}},
+  author={Egert J and Brombacher E and Warscheid B and Kreutz C},
+  journal={Journal of Proteome Research},
+  year={2021},
+  volume = {20},
+  pages = {3489-3496},
+}
+
+% Introduces Perseus. An extension of the MaxQuant platform but more for data analysis and visualization
+@article{Perseus,
+  title={{The Perseus computational platform for comprehensive analysis of (prote)omics data}},
+  author={Tyanova S and Temu T and Sinitcyn P and Carlson A and Hein M and Geiger T and Mann M and Cox J},
+  journal={Nature Methods},
+  year={2016},
+  volume = {13},
+  pages = {731-740},
+}
+
+% Benchmarking various MS imputation methods. Interesting in that it uses pathway analysis and DE protein analysis as evaluation metrics. Be careful not to overinterpret this one
+@article{Jin,
+  title={{A comparative study of evaluating missing value imputation methods in label-free proteomics.}},
+  author={Jin L and Bi Y and Hu C and Qu J and Shen S and Wang X and Tian Y},
+  journal={Scientific Reports},
+  year={2021},
+  volume = {11},
+  pages = {1760-1771},
+}
+
+% In the microarray context, good imputation is beneficial relative to no imputation. They simulate in missingness and show that imputation increases the accuracy of DE gene lists, decreases FDR relative to no imputation
+@article{microarray-de,
+  title={{DNA microarray data imputation and significance analysis of differential expression}},
+  author={Jornsten R and Wang H and Welsh W and Ouyang M},
+  journal={Bioinformatics},
+  year={2005},
+  volume = {21},
+  pages = {4155-4161},
+}
+
+% Introducing kNN imputation for microarray data
+@article{knn-impute,
+  title={{Missing value estimation method for DNA microarrays}},
+  author={Troyanskaya O and Cantor M and Sherlock G and Brown P and Hastie T and Tibshirani R and Botstein D and Altman R},
+  journal={Bioinformatics},
+  year={2001},
+  volume = {17},
+  pages = {520-525},
+}
+
+% Review of matrix factorization techniques used with respect to single-cell transcriptomics and earlier microarray experiments
+@article{enter-the-matrix,
+  title={{Enter the matrix: factorization uncovers knowledge from omics}},
+  author={Stein-O’Brien G and Arora R and Culhane C and Favorov A and Garmire L and Greene C and Goff L and Li Y and Ngom A and Ochs M and Xu Y and Fertig E},
+  journal={Trends in Genetics},
+  year={2018},
+  volume = {34},
+  pages = {790-805},
+}
+
+% Introduces the MissForest algorithm for imputation of generic numerical data. Some application to proteomics, along with like 5 other random data types
+@article{MissForest,
+  title={{MissForest -- non-parametric missing value imputation for mixed-type data}},
+  author={Stekhoven D and Buhlmann P},
+  journal={Bioinformatics},
+  year={2012},
+  volume = {28},
+  pages = {112-118},
+}
+
+% Jacob's method for using tensor decomp for learning a latent representation of the human epigenome from ENCODE data. One key point is imputation of missing epigenomic features
+@article{Avocado,
+  title={{Avocado: a multi-scale deep tensor factorization method leans a latent representation of the human epigenome}},
+  author={Schreiber J and Durham T and Bilmes J and Noble W},
+  journal={Genome Biology},
+  year={2020},
+  volume = {21},
+  pages = {},
+}
+
+% Potentially the original MaxQuant publication. Some discussion of quantification accuracy and database searching FDR
+@article{MaxQuant,
+  title={{MaxQuant enables high peptide identification rates, individualized p.p.b.-range mass accuracies and proteome-wide protein quantification}},
+  author={Cox J and Mann M},
+  journal={Nature Biotechnology},
+  year={2008},
+  volume = {26},
+  pages = {1367–1372},
+}
+
+% Introduces the PRIDE public database for proteomics
+@article{PRIDE,
+  title={{The PRIDE database and related tools and resources in 2019: improving support for quantification data}},
+  author={Perez-Riverol Y and Csordas A and Bai J and Bernal-Llinares M and Hewapathirana S and Kundu D and Inuganti A Griss J and Mayer G and Eisenacher M and Perez E and Uszkoreit J and Pfeuffer J and Sachsenberg T and Yilmaz S and Tiwary S and Cox J and Audain E and Walzer M and Jarnuczak A and Ternent T and Brazma A and Vizcaino JA}, 
+  journal={Nucleic Acids Research},
+  year={2019},
+  volume = {8},
+  pages = {442-450},
+}
+
+% Will and Wout's ppx program for accessing proteomics data on PRIDE and other public repositories
+@article{ppx,
+  title={{ppx: Programmatic Access to Proteomics Data Repositories}},
+  author={Fondrie W and Bittremieux W and Noble W},
+  journal={Journal of Proteome Research},
+  year={2021},
+  volume = {20},
+  pages = {4621–4624},
+}
+
+% Introducing the CPTAC database for cancer proteomics
+@article{CPTAC,
+  title={{The CPTAC Data Portal: A Resource for Cancer Proteomics Research}},
+  author={Edwards N and Oberti M and Thangudu R and Cai S and McGarvey P and Jacob S and Madhavan S and Ketchum K},
+  journal={Journal of Proteome Research},
+  year={2015},
+  volume = {14},
+  pages = {2707-2713},
+}
+
+% An imputation method that tries to distinguish between biological and technical zeros in single-cell RNAseq data
+@article{ALRA,
+  title={{Zero-preserving imputation of single-cell RNA-seq data}},
+  author={Linderman G and Zhao J and Roulis M and Bielecki P and Flavell R and Nadler B and Kluger Y},
+  journal={Nature Communications},
+  year={2022},
+  volume = {192},
+  pages = {},
+}
+
+% Data sharing in proteomics is getting better and the field is starting to resemble genomics in that respect. Plethora of public proteomics data presents unique opportunities for data analysis
+@article{golden-age,
+  title={{A golden age for working with public proteomics data}},
+  author={Martens L and Vizcaino J},
+  journal={Trends in Biomedical Sciences},
+  year={2017},
+  volume = {42},
+  number = {5},
+  pages = {},
+}
+
+% Bill's editorial -- proteomics has a problem with data sharing. Things have gotten better since 2004, but this is still a problem. 
+@article{editorial,
+  title={{Data hoarding is harming proteomics}},
+  author={Noble W},
+  journal={Nature Biotechnology},
+  year={2004},
+  volume = {22},
+  number = {10},
+  pages = {1209},
+}
+
+% Introduces the MassIVE.quant database
+@article{massive-quant,
+  title={{MassIVE.quant: a community resource of quantitative mass spectrometry–based proteomics datasets}},
+  author={Choi M and Carver J and Chiva C and Tzouros M and Huang T and Tsai TH and Pullman B and Bernhardt O and Huttenhain R and Teo GC and Perez-Riverol Y and Muntel J and Muller M and Goetze S and Pavlou M and Verschueren E and Wollscheid B and Nesvizhskii A and Reiter L and Dunkley T and Sabido E and Bandeira N and Vitek O},
+  journal={Nature Methods},
+  year={2020},
+  volume = {17},
+  number = {},
+  pages = {981-984},
+}
+
+% ML method that attempts to learn the pattern of missingness in a dataset and modeling it to improve the imputation with an existing imputation method
+@article{miracle,
+  title={{MIRACLE: Causally-aware imputation via learning missing data mechanisms}},
+  author={Kyono T and Zhang Y and Bellot A and van der Schaar M},
+  journal={35th Conference on Neural Information Processing Systems (NeurIPS)},
+  year={2021},
+  volume = {},
+  number = {},
+  pages = {},
+}
+
+% DIA is more sensitive than traditional shotgun (DDA) proteomics. In terms of identification and quantification accuracy
+@article{dia-vs-shotgun,
+  title={{Extending the Limits of Quantitative Proteome Profiling with Data-Independent Acquisition and Application to Acetaminophen-Treated Three-Dimensional Liver Microtissues}},
+  author={Brunderer R and Bernhardt O and Gandhi T and Miladinovic S and Cheng LY and Messner S and Ehrenberger T and Zanotelli V and Butscheid Y and Escher C and Vitek O and Rinner O and Reiter L},
+  journal={Molecular and Cellular Proteomics},
+  year={2015},
+  volume = {14},
+  number = {5},
+  pages = {1400-1410},
+}
+
+% Review of matrix factorization methods used for microarray data analysis
+@article{nmf-microarray,
+  title={{Matrix Factorization Methods Applied in Microarray Data Analysis}},
+  author={Kossenkov A and Ochs M},
+  journal={International Journal of Data Mining and Bioinformatics},
+  year={2010},
+  volume = {4},
+  number = {1},
+  pages = {72-90},
+}
+
+% NMF for denoising and feature extraction of astronomy images
+@article{nmf-hubble,
+  title={{Non-negative matrix factorization: Robust extraction of extended structures}},
+  author={Ren B and Pueyo L and Zhu G and Debes J and Duchene G},
+  journal={The Astrophysical Journal},
+  year={2018},
+  volume = {852},
+  number = {104},
+}
+
+% NMF used for feature extraction in astronomy data. Used to identify interesting features in very large-scale astronomy data
+@article{star-nmf,
+  title={{Discriminating Variable Star Candidates in Large Image Databases from the HiTS Survey Using NMF}},
+  author={Huijse P and Estevez P and Forster F and Berrocal E},
+  journal={INNS Conference on Big Data},
+  year={2015},
+  volume = {53},
+  pages = {29-38},
+}
+
+% Introduces Gromov-Wasserstein distance
+@article{gw,
+  title={{Gromov-Wasserstein distances and the metric approach to object matching}},
+  author={Memoli F},
+  journal={Foundations of computational mathematics},
+  year={2011},
+  volume = {11},
+  pages = {417-487},
+}
+
+% Missing values are a big problem for large-scale multi-batch TMT experiments. Missingness scales logarithmically at both the peptide and protein levels. This is an important one
+@article{multi-tmt,
+  title={{Multibatch TMT reveals false positives, batch effects and missing values}},
+  author={Brenes A and Hukelmann J and Bensaddek D and Lamond A},
+  journal={Molecular and Cellular Proteomics},
+  year={2019},
+  volume = {18},
+  number = {10}, 
+  pages = {1967-1980},
+}
+
+% When proteomicists summarize at the protein level, they lose a lot of potentially valuable information. Peptide level encodes a lot more heterogeneity, and is probably more valuable to look at, in most contexts. 
+@article{humpty-dumpty,
+  title={{Putting Humpty Dumpty Back Together Again: What Does Protein Quantification Mean in Bottom-Up Proteomics?}},
+  author={Plubell D and Kall L and Webb-Robertson BJ and Bramer L and Ives A and Kelleher N and Smith L and Montine T and Wu C and MacCoss M},
+  journal={Journal of Proteome Research},
+  year={2022},
+  volume = {21},
+  pages = {891-898},
+}
+
+% Protein abundances correlate remarkably well across worm and fly. Much better than mRNA levels across worm and fly, and much better than protein vs mRNA within the same species. Suggests that protein abundance is more evolutionarily conserved than transcript abundance. 
+@article{worm-vs-fly,
+  title={{Comparative Functional Analysis of the Caenorhabditis elegans
+and Drosophila melanogaster Proteomes}},
+  author={Schrimpf S and Weiss M and Reiter L and Ahrens C and Jovanovic M and Malmstrom J and Brunner E and Mohanty S and Lercher M and Hunziker P and Aebersold R and von Mering C and Hengartner M},
+  journal={PLoS Biology},
+  year={2009},
+  volume = {7},
+  number = {3},
+}
+
+% Very difficult to predict protein abundance from mRNA abundance. 
+@article{gygi-yeast,
+  title={{Correlation between protein and mRNA abundance in yeast}},
+  author={Gygi S and Rochon Y and Franza R and Aebersold R},
+  journal={Molecular and Cellular Biology},
+  year={1999},
+  volume = {19},
+  number = {3},
+  pages = {1720-1730},
+}
+
+% Somewhat controversial but highly cited study that makes the case that 2/3 of proteins could potentially be glycosylated. Would be nice to have a stronger ref than this
+@article{swiss-prot-99,
+  title={{On the frequency of protein glycosylation, as deduced from analysis of the SWISS-PROT database}},
+  author={Apweiler R and Hermjakob H and Sharon N},
+  journal={Biochimica et Biophysica Acta},
+  year={1999},
+  volume = {1473},
+  pages = {4-8},
+}
+
+% NMF imputation of metabolomics data
+@article{nmf-metabolomics,
+  title={{NMF-Based Approach for Missing Values Imputation of Mass Spectrometry Metabolomics Data}},
+  author={Xu J and Wang Y and Xu X and Cheng KK and Raftery D and Dong J},
+  journal={Molecules},
+  year={2021},
+  volume={26},
+  number={19},
+}
+
+% Two step imputation approach that first involves estimating the pattern of missingness and then imputing with a method deemed to be optimal for the detected missingness pattern. 
+@article{dekermanjian,
+  title={{Mechanism‐aware imputation: a two‐step approach in handling missing values in metabolomics}},
+  author={Dekermanjian J and Shaddox E and Nandy D and Ghosh D and Kechris K},
+  journal={BMC Bioinformatics},
+  year={2022},
+  volume={23},
+  number={179},
+}
+
+% Compare several imputation methods on data with different patterns of simulated missingness. Conclusion is that optimal imputation method largely depends on the missingness pattern/mechanism
+@article{lazar,
+  title={{Accounting for the Multiple Natures of Missing Values in Label-Free Quantitative Proteomics Data Sets to Compare Imputation Strategies}},
+  author={Lazar C and Gatto L and Ferro M and Bruley C and Burger T},
+  journal={Journal of Proteome Research},
+  year={2016},
+  volume={15},
+  pages={1116-1125},
+}
+
+% Describes the MacCoss lab's DIA-only workflow. No need for an initial DDA scan to establish a spectral library. Instead they use pooled-sample, narrow-window DIA scans to establish a chromatograph library. Chromatograph library vs spectral library. 
+This is EncyclopeDIA!
+@article{chromatogram-DIA,
+  title={{Chromatogram libraries improve peptide detection and quantification by data independent acquisition mass spectrometry}},
+  author={Searle B and Pino L and Egertson J and Ting Y and Lawrence R and MacLean B and Villen J and MacCoss M},
+  journal={Nature Communications},
+  year={2018},
+  volume={9},
+  number={5128},
+}
+
+% From Aebersold lab, makes the case that most proteins are more temporally stable than most RNAs
+@article{rna-v-protein-degredation,
+  title={{Comparative analysis of mRNA and protein degradation in prostate tissues indicates high stability of proteins}},
+  author={Shao W and Guo T and Toussaint N and Xue P and Wagner U and Li L and Charmpi C and Zhu Y and Wu J and Buljan M and Sun R and Rutishauser D and Hermanns T and Fankhauser CD Poyet C and Ljubicic J and Rupp N and Ruschoff J and Zhong Q and Beyer A and Ji J and Collins B and Liu Y and Ratsch G and Wild P and Aebersold R},
+  journal={Nature Communications},
+  year={2019},
+  volume={10},
+  number={2524},
+}
+
+% The first description of the Skyline software tool for proteomics data processing, I'm pretty sure. Limited to targeted proteomics (SRM + PRM)
+@article{skyline,
+  title={{Skyline: an open source document editor for creating and analyzing targeted proteomics experiments}},
+  author={MacLean B and Tomazela D and Shulman N and Chambers M and Finney G and Frewen B and Kern R and Tabb D and Liebler D and MacCoss M},
+  journal={Bioinformatics},
+  year={2010},
+  volume={26},
+  number={7},
+}
+
+% Skyline extended to DIA. Important to include
+@article{skyline-dia,
+  title={{Multiplexed peptide analysis using data-independent acquisition and Skyline}},
+  author={Egertson J and MacLean B and Johnson R and Xuan Y and MacCoss M},
+  journal={Nature Protocols},
+  year={2015},
+  volume={10},
+  number={6},
+}
+
+% Description of ComBat method of batch correction. Here its applied to microarray data, but I'm pretty sure this is the classic reference that everyone uses
+@article{combat,
+  title={{Adjusting batch effects in microarray expression data using empirical Bayes methods}},
+  author={Johnson W and Li C},
+  journal={Biostatistics},
+  year={2007},
+  volume={8},
+  number={1},
+}
+
+% Panorama Public, from the MacCoss lab. A public repository for targeted proteomics data processed with Skyline
+@article{panorama-public,
+  title={{Panorama Public: A Public Repository for Quantitative Data Sets Processed in Skyline}},
+  author={Sharma V and Eckels J and Schilling B and Ludwig C and Jaffe J and MacCoss M and MacLean B},
+  journal={Molecular and Cellular Proteomics},
+  year={2018},
+  volume={17},
+  number={6},
+}
+
+% This is a benchmarking study that is more concerned with upstream data processing steps (i.e. MaxQuant, OpenMS) than imputation methods, although the effects of various imputation methods are investigated. 
+@article{valikangas,
+  title={{A comprehensive evaluation of popular proteomics software workflows for label-free proteome quantification and imputation}},
+  author={Välikangas T and Suomi T and Elo L},
+  journal={Briefings in Bioinformatics},
+  year={2018},
+  volume={19},
+  number={6},
+}
+
+% A high quality imputation method benchmarking study. Uses dilution series dataset as well as the classic and proteomic criteria from NAguideR. Clever use of significant proteins that should/should not be expressed in certain experimental conditions.
+@article{dabke,
+  title={{A simple optimization workflow to enable precise and accurate imputation of missing values in proteomic data sets}},
+  author={Dabke K and Kreimer S and Jones M and Parker S},
+  journal={Journal of Proteome Research},
+  year={2021},
+  volume={20},
+  pages={3214-3229},
+}
+
+% Scooped our NMF impute idea. Still a bioRxiv pre-print
+@article{ms-impute,
+  title={{MSImpute: Imputation of label-free mass spectrometry peptides by low-rank approximation}},
+  author={Hediyeh Zadeh S and Webb A and Davis M},
+  journal={bioRxiv},
+  year={2020},
+  volume={},
+  number={},
+}
+
+% Fairly basic imputation method bake-off for metabolomics. NRMSE is the main evaluation criteria. 
+@article{metab-bakeoff,
+  title={{Missing value imputation approach for mass spectrometry-based metabolomics data}},
+  author={Wei R and Wang J and Su M and Jia E and Chen S and Chen T and Ni Y},
+  journal={Scientific Reports},
+  year={2018},
+  volume={8},
+  number={663},
+}
+
+% NAguideR. Basically an R package that runs a whole bunch of different imputation methods on the data you give it and selects the best one. Uses both "classic" evaluation criteria as well as "proteomics specific."
+@article{na-guide-r,
+  title={{NAguideR: performing and prioritizing missing value imputations for consistent bottom-up proteomic analyses}},
+  author={Wang S and Li W and Hu L and Cheng J and Yang H and Liu Y},
+  journal={Neucleic Acids Research},
+  year={2020},
+  volume={48},
+  number={14},
+}
+
+% Lindsay's serial dilution experiment
+@article{matrix-matched-calib,
+  title={{Matrix-matched calibration curves for assessing analytical figures of merit in quantitative proteomics}},
+  author={Pino L and Searle B and Yang HY and Hoofnagle A and Noble W and MacCoss M},
+  journal={Journal of Proteome Research},
+  year={2020},
+  volume={19},
+  pages={1147-1153},
+}
+
+% PXD016079. A DDA experiment, quantified with MaxQuant. 
+@article{pxd016079,
+  title={{Comparative differential cuproproteomes of Rhodobacter capsulatus reveal novel copper homeostasis related proteins}},
+  author={Selamoglu N and Önder Ö and Öztürk Y and Khalfaoui-Hassani B and Blaby-Hass C and Garcia B and Koch HG and Daldal F},
+  journal={Metallomics},
+  year={2020},
+  volume={12},
+  number={572},
+}
+
+% PXD014525. DIA experiment, MaxQuant. 
+@article{pxd014525,
+  title={{Rapid and site-specific deep phosphoproteome profiling by data-independent acquisition without the need for spectral libraries}},
+  author={Bekker-Jensen D and Bernhardt O and Hogrebe A and Martinez-Val A and Verbeke L and Gandhi T and Kelstrup C and Reiter L and Olsen J},
+  journal={Nature Communications},
+  year={2020},
+  volume={11},
+  number={787},
+}
+
+% PXD006109. DIA experiment, quantified with MaxQuant. 
+@article{pxd006109,
+  title={{BoxCar acquisition method enables single-shot proteomics at a depth of 10,000 proteins in 100 minutes}},
+  author={Meier F and Geyer P and Virreira Winter S and Cox J and Mann M},
+  journal={Nature Methods},
+  year={2018},
+  volume={15},
+  pages={440-448},
+}
+
+% The DIA assessment of AD from the MacCoss lab. We've been using data from this experiment for a while now; the study was finally published on BioRxiv. 
+@article{smtg-maccoss,
+  title={{A peptide-centric quantitative proteomics dataset for the phenotypic assessment of Alzheimer's disease}},
+  author={Merrihew G and Park J and Plubell D and Searle B and Keene D and Larsen E and Bateman R and Perrin R and Chhatwal J and Farlow M and McLean C and Ghetti B and Newell K and Frosch M and Montine T and MacCoss M},
+  journal={bioRxiv},
+  year={2022},
+  volume={},
+  number={},
+}
+
+% CPTAC S051. This is a large-scale TMT clinical dataset. 
+@article{CPTAC-S051,
+  title={{Microscaled proteogenomic methods for precision oncology}},
+  author={Satpathy S and Jaehnig E and Krug K and Kim BJ and Saltzman  A and Chan D and Holloway K and Anurag M and Huang C and Singh P and Gao A and Namai N and Dou Y and Wen B and Vasaikar S and Mutch D and Watson M and Ma C and Ademuyiwa F and Rimawi M and Schiff R and Hoog J and Jacobs S and Malovannaya A Hyslop T and Clauser K and Mani D and Perou C and Miles G and Zhang B and Gillette M and Carr S and Ellis M},
+  journal={Nature Communications},
+  year={2020},
+  volume={11},
+  number={532},
+}
+
+% CPTAC S047. This is another large-scale TMT clinical dataset. 
+@article{CPTAC-S047,
+   title={{Integrated proteogenomic characterization across major histological types of pediatric brain cancer}},
+   author={Petralia F and Tignor N and Reva B and Koptyra M and Chowdhury S and Rykunov D and Krek A and Ma W and Zhu Y and Ji J and Calinawan A and Whiteaker J and Colaprico A and Stathias V and Omelchenko T and Song X and Raman P and Guo Y and Brown M and Ivey R and Szpyt J and Thakurta SG and Gritsenko M and Weitz K and Lopez G and Kalayci S and Gumus Z and Yoo S and da Veiga Leprevost F and Chang HY and Krug K and Katsnelson L and Wang Y and Kennedy J and Voytovich U and Zhao L and Gaonkar K and Ennis B and Zhang B and Baubet V and Tauhid L and Lilly J and Mason J and Farrow B and Young N and Leary S and Moon J and Petyuk V and Nazarian J and Adappa N and Palmer J and Lober R and Rivero-Hinojosa S and Wang LB and Wang J and Broberg M and Chu R and Moore R and Monroe M and Zhao R and Smith R and Zhu J and Robles A and Mesri M and Boja E and Hiltke T and Rodriguez H and Zhang B and Schadt E and Mani DR and Ding L and Iavarone A and Wiznerowicz M and Schurer S and Chen XS and Heath A and Rokita JL and Nesvizhskii A and Fenyo D and Rodland K and Liu T and Gygi S and Paulovich A and Resnick A and Storm P and Roo B and Wang P and Children's Brain Tumor Network and Clinical Proteomic Tumor Analysis Consortium},
+   journal={Cell},
+   year={2020},
+   volume={183},
+   pages={1962-1985},
+ }
+
+% PXD013792
+@article{pxd013792,
+  title={{Trafficking of siRNA precursors by the dsRBD protein blanks in Drosophila}},
+  author={Nitschko V and Kunzelmann S and Frohlich T and Arnold G and Forstemann K},
+  journal={Nucleic Acids Research},
+  year={2020},
+  volume={48},
+  number={7},
+}
+
+% PXD014156
+@article{pxd014156,
+  title={{Using proteomics for an insight into the performance of activated sludge in a lab-scale WWTP}},
+  author={Azizan A and Kaschani F and Barinas H and Blaskowski S and Kaiser M and Denecke M},
+  journal={International Biodeterioration and Biodegradation},
+  year={2020},
+  volume={149},
+  number={104934},
+}
+
+% PXD006348
+@article{pxd006348,
+  title={{Pan-proteomic analysis and elucidation of protein abundance among the closely related Brucella species, Brucella abortus and Brucella melitensis}},
+  author={Murugaiyan J and Eravci M and Weise C and Roesler U and Sprague L and Neubauer H and Wareth G},
+  journal={Biomolecules},
+  year={2020},
+  volume={10},
+  number={836},
+}
+
+% PXD011961 
+@article{pxd011961,
+  title={{Shifts in ribosomal engagement impact key gene sets in neurodevelopment and ubiquitination in Rett syndrome}},
+  author={Rodrigues D and Mufteev M and Weatheritt R and Djuric U and Ha K and Ross PJ and Wei W and Piekna A and Sartori M and Byres L and Mok R and Zaslavsky K and Pasceri P and Diamandis P and Morris Q and Blencowe B and Ellis J},
+  journal={Cell Reports},
+  year={2020},
+  volume={30},
+  pages={4179-4196},
+}
+
+% Philosopher data processing suite for quantitative proteomics.
+@article{philosopher,
+  title={{Philosopher: a versatile toolkit for shotgun proteomics data analysis}},
+  author={da Veiga Leprevost F and Haynes S and Avtonomov D and Chang HY and Shanmugam A and Mellacheruvu D and Kong A and Nesvizhskii A},
+  journal={Nature Methods},
+  year={2020},
+  volume={17},
+  pages={869-870},
+}
+
+% ProteomeXchange
+@article{ProteomeXchange,
+  title={{ProteomeXchange provides globally coordinated proteomics data submission and dissemination}},
+  author={Vizcaíno J and Deutsch E and Wang R and Csordas A and Reisinger F and Ríos D and Dianes J and Sun Z and Farrah T and Bandeira N and Binz PA and Xenarios I and Eisenacher M and Mayer G and Gatto L and Campos A and Chalkley R and Kraus HJ and Albar JP and Martinez-Bartolomé S and Apweiler R and Omenn G and Martens L and Jones A and Hermjakob H},
+  journal={Nature Biotechnology},
+  year={2014},
+  volume={32},
+  pages={223–226},
+}
+
+% UpsetR R package
+@article{UpsetR,
+  title={{UpSetR: an R package for the visualization of intersecting sets and their properties}},
+  author={Conway J and Lex A and Gehlenborg N},
+  journal={Bioinformatics},
+  year={2017},
+  volume={33},
+  number={18},
+}
+
+% pcaMethods R package
+@article{pcaMethods,
+  title={{pcaMethods—a bioconductor package providing PCA methods for incomplete data}},
+  author={Stacklies W and Redestig H and Scholz M and Walther D and Selbig J},
+  journal={Bioinformatics},
+  year={2007},
+  volume={23},
+  number={9},
+}
+
+% missMDA R package
+@article{missMDA,
+  title={{missMDA: a package for handling missing values in multivariate data analysis}},
+  author={Josse J and Husson F},
+  journal={Journal of Statistical Software},
+  year={2016},
+  volume={70},
+  number={1},
+}
+
+% VIM R package
+@article{VIM,
+  title={{Imputation with the R package VIM}},
+  author={Kowarik A and Templ M},
+  journal={Journal of Statistical Software},
+  year={2016},
+  volume={74},
+  number={7},
+}
+
+% PXD007683. TMT paper from the Gygi lab. Human-yeast spike-in experiment. 
+@article{pxd007683,
+  title={{Proteome-wide evaluation of two common protein quantification methods}},
+  author={O’Connell J and Paulo J and O’Brien J and Gygi S},
+  journal={Journal of Proteome Research},
+  year={2018},
+  volume={17},
+  number={5},
+}
+
+% Article citation template
+% @article{,
+%   title={{}},
+%   author={},
+%   journal={},
+%   year={},
+%   volume={},
+%   number={},
+% }

@@ -1,0 +1,112 @@
+"""
+SNAKEFILE
+
+1.19.22
+Snakemake workflow for running `calculate-loq.py` on a bunch of 
+different reconstructed matrices. The issue is this python 
+script is painfully slow. It only runs on a single core. So if we
+can figure out a way of parallelizing the workflow so that the 
+python script is running on all five reconstructed matrices at the 
+same time, that would give us a cool 5x speed up. 
+
+Don't actually need to run this on the cluster to get massive speed
+ups!! Locally (i.e. on uracil), can run like so: 
+	snakemake --snakefile Snakefile --use-conda --cores 24 --jobs 6
+"""
+import yaml 
+
+# CONFIG ------------------------------------------------------------
+METHODS = ["NMF", "KNN", "mf", "min", "std"] # leaving orig out here
+
+# RULES -------------------------------------------------------------
+rule all: 
+	input:
+		expand(
+			"out/fom-{method}-recon-MCAR-test.csv",
+			method=METHODS,
+		),
+		"out/fom-orig-MCAR-test.csv",
+		expand(
+			"out/fom-{method}-recon-MCAR.csv",
+			method=METHODS,
+		),
+		"out/fom-orig-MCAR.csv",
+
+# Run `calculate-loq.py`, on all five reconstructed 
+# 	matrices at the same time. For the 300 peptide test matrices 
+# 	here. 
+rule loq_runner_test:
+	input: "data/cc-{method}-recon-MCAR-tester.csv"
+	output: "out/fom-{method}-recon-MCAR-test.csv"
+	conda: "env/loq-env.yml"
+	threads: 4
+	resources: 
+		mfree="4G",
+		h_rt="24:0:0",
+		cpus=2,
+	log:"logs/{method}-loq-tester.log"
+	shell:
+		"""
+		python calculate-loq.py {input} \
+			filename2samplegroup_map.csv --plot n
+		mv figuresofmerit.csv {output}
+		"""
+
+# Run `calculate-loq.py` on the original (unimputed) peptide quants
+#	matrix. Defining a separate rule for this just because the naming
+# 	convention is a bit different. For the test set of 300 peptides.
+rule loq_runner_orig_test:
+	input: "data/cc-orig-MCAR-tester.csv"
+	output: "out/fom-orig-MCAR-test.csv"
+	conda: "env/loq-env.yml"
+	threads: 4
+	resources: 
+		mfree="4G",
+		h_rt="24:0:0",
+		cpus=2,
+	log:"logs/orig-loq-tester.log"
+	shell:
+		"""
+		python calculate-loq.py {input} \
+			filename2samplegroup_map.csv --plot n
+		mv figuresofmerit.csv {output}
+		"""
+
+# Run `calculate-loq.py`, on all five reconstructed 
+# 	matrices at the same time. For all 21k (?) peptides
+rule loq_runner_all:
+	input: "data/cal-curves-{method}-recon-MCAR.csv"
+	output: "out/fom-{method}-recon-MCAR.csv"
+	conda: "env/loq-env.yml"
+	threads: 4
+	resources: 
+		mfree="4G",
+		h_rt="24:0:0",
+		cpus=2,
+	log:"logs/{method}-loq-runner.log"
+	shell:
+		"""
+		python calculate-loq.py {input} \
+			filename2samplegroup_map.csv --plot n
+		mv figuresofmerit.csv {output}
+		"""
+
+# Run `calculate-loq.py` on the original (unimputed) peptide quants
+#	matrix. Defining a separate rule for this just because the naming
+# 	convention is a bit different. All 21k peptides here. 
+rule loq_runner_orig_all:
+	input: "data/cal-curves-orig-MCAR.csv"
+	output: "out/fom-orig-MCAR.csv"
+	conda: "env/loq-env.yml"
+	threads: 4
+	resources: 
+		mfree="4G",
+		h_rt="24:0:0",
+		cpus=2,
+	log:"logs/orig-loq-runner.log"
+	shell:
+		"""
+		python calculate-loq.py {input} \
+			filename2samplegroup_map.csv --plot n
+		mv figuresofmerit.csv {output}
+		"""

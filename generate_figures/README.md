@@ -1,0 +1,1 @@
+This directory contains all of the scripts and notebooks necessary to recreate all of the figures in the manuscript. 

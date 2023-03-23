@@ -1,4 +1,4 @@
-all: 2022benchmark.pdf
+all: 2023benchmark.pdf
 
 %.pdf: %.tex
 	pdflatex $*.tex

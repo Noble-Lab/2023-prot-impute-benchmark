@@ -618,6 +618,176 @@ This is EncyclopeDIA!
   number={5},
 }
 
+% bioRxiv preprint that introduces three new deep learning-based impute methods for proteomics
+@article{deep-impute,
+  title={{Mass spectrometry-based proteomics imputation using self supervised deep learning}},
+  author={Webel H and Niu L and Nielsen AB and Locard-Paulet M and Mann M and Jensen LJ and Rasmussen S},
+  journal={bioRxiv},
+  year={2023},
+  doi={https://doi.org/10.1101/2023.01.12.523792},
+}
+
+% Introduces a statistical procedure for stabilizing the observed variance in microarray data
+@article{microarray-var-stable,
+  title={{A variance-stabilizing transformation for gene expression microarray data}},
+  author={Durbin B and Hardin J and Hawkins D and Rocke D},
+  journal={Bioinformatics},
+  year={2002},
+  volume={18},
+  pages={S105-S110},
+}
+
+% Introduces a zero-inflated negative binomial model for denoising scRNA-seq data. 
+@article{ZINB,
+  title={{A general and flexible method for signal extraction from single-cell RNA-seq data}},
+  author={Risso D and Perraudeau F and Gribkova S and Dudoit S and Vert JP},
+  journal={Nature Communications},
+  year={2018},
+  volume={9},
+  number={284},
+}
+
+% Introduces a negative binomial-based variance stabilization procedure for scRNA-seq data
+@article{neg-binom-scRNAseq,
+  title={{Normalization and variance stabilization of single-cell RNA-seq data using regularized negative binomial regression}},
+  author={Hafemeister C and Satija R},
+  journal={Genome Biology},
+  year={2019},
+  volume={20},
+  number={296},
+}
+
+% A formal derivation of the use of Poisson/Gaussian distributions to describe MS-MS data based on first principles and physical properties of the instrument.
+@article{ms-dist-derivation,
+  title={{Derivation from first principles of the statistical distribution of the mass peak intensities of MS data}},
+  author={Ipsen A},
+  journal={Analytical Chemistry},
+  year={2015},
+  volume={87},
+  pages={1726-1734},
+}
+
+% Outlines some theoretical arguments for statistical modeling of LC-MS data.
+@article{stat-theory-lcms,
+  title={{Prospects for a statistical theory of LC/TOFMS data}},
+  author={Ipsen A and Ebbels T},
+  journal={Journal of the American Society of Mass Spectrometry},
+  year={2012},
+  volume={23},
+  pages={779-791},
+}
+
+% Provides evidence that scRNA-seq imputation can generate a lot of false positives
+@article{scRNAseq-false-signals,
+  title={{False signals induced by single-cell imputation}},
+  author={Andrews T and Hemberg M},
+  journal={F1000 Research},
+  year={2019},
+  volume={7},
+  number={1740},
+}
+
+% Makes the case that imputation should not be used for gene network reconstruction from scRNA-seq data
+@article{sc-impute-gene-networks,
+  title={{Effect of imputation on gene network reconstruction from single-cell 
+  RNA-seq data}},
+  author={Ly LH and Vingron M},
+  journal={Patterns},
+  year={2022},
+  volume={3},
+  number={100414},
+}
+
+% Variance stabilization of ChiP-seq measurements. Have similar overdispersion figures to the ones I generated. 
+@article{variance-stable,
+  title={{VSS: variance-stabilized signals for sequencing-based genomic signals}},
+  author={Bayat F and Libbrecht M},
+  journal={Bioinformatics},
+  year={2021},
+  volume={37},
+  number={23},
+}
+
+% A review of the practice of multiple imputation for clinical and epidemiological data
+@article{multi-impute-clinical,
+  title={{Multiple imputation for missing data in epidemiological and clinical research: potential and pitfalls}},
+  author={Sterne J and White I and Carlin J and Spratt M and Royston P and Kenward M and Wood A and Carpenter J},
+  journal={BMJ},
+  year={2009},
+  volume={338},
+  number={b2393},
+}
+
+% Reference for local similarity impute for astronomy data
+@article{astro-impute1,
+  title={{Estimation of missing values in astronomical survey data: An improved local approach using cluster directed neighbor selection}},
+  author={Keerin P and Boongoen T},
+  journal={Information Processing and Management},
+  year={2022},
+  volume={59},
+  number={102881},
+}
+
+% Another reference for missing data imputation for astronomy data. This one is from NeurIPS 2021
+@article{astro-impute2,
+  title={{Missing data imputation for galaxy redshift estimation}},
+  author={Luken K and Padhy R and Wang XR},
+  journal={NeurIPS},
+  year={2021},
+  volume={},
+  number={},
+}
+
+% MAGIC method for imputing and denoising scRNA-seq data
+@article{magic-scRNA,
+  title={{Recovering gene interactions from single-cell data using data diffusion}},
+  author={van Dijk D and Sharma R and Nainys J and Yim K and Kathail P and Carr A and Burdziak C and Moon K and Chaffer C and Pattabiraman D and Bierie B and Mazutis L and Wolf G and Krishnaswamy S and Pe’er D},
+  journal={Cell},
+  year={2018},
+  volume={174},
+  pages={716-729},
+}
+
+% Investigates variance heterogeneity in iTRAQ quants and uses a generalized logarithmic variance-stabilizing normalization to correct for it. Also suggests that log transform doesn't totally stabilize variance. Propose a two component, additive multiplicative error model to account for variance structure. 
+@article{iTRAQ-variance,
+  title={{Addressing accuracy and precision issues in iTRAQ quantitation}},
+  author={Karp N and Huber W and Sadowski P and Charles P and Hester S and Lilley K},
+  journal={Molecular and Cellular Proteomics},
+  year={2010},
+  volume={9},
+  pages={1885-1897},
+}
+
+% Quantifies error in processed MS data with a two-component error model. 
+@article{ms-noise-2-component,
+  title={{Quantifying reproducibility for differential proteomics: noise analysis for protein liquid chromatography-mass spectrometry of human serum}},
+  author={Anderle M and Roy S and Lin H and Becker C and Joho K},
+  journal={Bioinformatics},
+  year={2004},
+  volume={20},
+  number={18},
+}
+
+% Introduces a variance stabilizing transformation for microarray counts. In theory, people can use it for protein quants. 
+@article{variance-stable-microarray,
+  title={{Variance stabilization applied to microarray data calibration and to the quantification of differential expression}},
+  author={Huber W and von Heydebreck A and Sultmann H and Poustka A and Vingron M},
+  journal={Bioinformatics},
+  year={2002},
+  volume={18},
+  number={Supp 1},
+}
+
+% Uses Poisson statistics to model arrivals in ion-counting mass spectrometers
+@article{kimmel-2005,
+  title={{Peak height precision in Hadamard transform time-of-flight mass spectra}},
+  author={Kimmel J and Kyu Yoon O and Zuleta I and Trapp O and Zare R},
+  journal={American Society of Mass Spectrometry},
+  year={2005},
+  volume={16},
+  number={1117-1130},
+}
+
 % Article citation template
 % @article{,
 %   title={{}},

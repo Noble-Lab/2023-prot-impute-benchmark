@@ -1,6 +1,6 @@
 """
-DE-TEST-SIMPLE
-1.10.23
+DE-TEST-RUNNER
+2.1.23
 
 Here I'm running the differential expression test on the SMTG data 
 from Mike's lab, with the goal of producing a publication quality 
@@ -14,6 +14,12 @@ This will simulate either MNAR or MCAR missingness, but keep in mind
 that we are limited to a single dataset here: the DIA SMTG one from
 Mike's lab. So can't (easily) repeat this experiment for a DDA 
 dataset. 
+
+This one includes both missForest and the no impute condition. No
+hyperparam searching for missForest. Adding code so that the 
+Precision Recall stats will be output to a dataframe after each 
+run. This way we won't need to rerun this entire script just to
+make plots. 
 """
 import pandas as pd
 import numpy as np
@@ -44,19 +50,19 @@ import intermediate_plots
 
 # plotting templates
 sns.set(context="talk", style="ticks") 
-pal = sns.color_palette()
+sns.set_palette("tab10")
 
 #####################################################################
 #### CONFIGS 	
 #####################################################################
 # partitioning params
-val_frac = 0.2
+val_frac = 0.3
 test_frac = 0.0
 # setting this to 0 ensures that no peptides will be filtered out
 min_present = 0     # during partitioning
-q_anchor=0.3  # these three for MNAR partition 
-t_std=0.6
-brnl_prob=0.75
+q_anchor=0.6  # these three for MNAR partition 
+t_std=1.8
+brnl_prob=0.92
 
 # NMF model params
 n_factors = [1,2,4,8,16,32]   # [1,2,4,8,16,32] is default
@@ -70,8 +76,8 @@ loss_func = "MSE"
 k_neighbors = [1,2,4,8,16,32] # [1,2,4,8,16,32] is default
 
 # missForest impute params
-n_trees = [100]   # [10,50,100,200,400,800] is default?
-max_iters_mf = 10             # 16 or 20 is default
+n_trees = [100]               # [100] is default
+max_iters_mf = 10             # 10 is default
 r_seed = 36 # the random seed for rpy2
 n_cores_mf = 1
 
@@ -264,7 +270,7 @@ for factors in n_factors:
 # Get plots for the best performing NMF model 
 intermediate_plots.plot_train_loss(
             model=best_model_nmf, 
-            PXD="SMTG", 
+            PXD="SMTG-tester", 
             n_row_factors=best_model_nmf.n_row_factors,
             n_col_factors=best_model_nmf._n_col_factors, 
             model_type="NMF", 
@@ -274,7 +280,7 @@ intermediate_plots.plot_train_loss(
 intermediate_plots.real_v_imputed_basic(
             recon_mat=best_recon_nmf, 
             val_mat=val, 
-            PXD="SMTG",
+            PXD="SMTG-tester",
             row_factors=best_model_nmf.n_row_factors,
             col_factors=best_model_nmf._n_col_factors,
             model_type="NMF",
@@ -284,13 +290,16 @@ intermediate_plots.real_v_imputed_basic(
 intermediate_plots.real_v_imputed_basic(
             recon_mat=best_full_recon_nmf,
             val_mat=train,
-            PXD="SMTG",
+            PXD="SMTG-tester",
             row_factors=best_model_nmf.n_row_factors,
             col_factors=best_model_nmf._n_col_factors,
             model_type="NMF", 
             log_transform=False,
             tail="train",
 )
+#checkpoint
+best_recon_nmf_pd = pd.DataFrame(best_recon_nmf)
+best_recon_nmf_pd.to_csv("data/nmf-recon-mcar.csv", index=None)
 
 #####################################################################
 ### KNN IMPUTE
@@ -317,13 +326,16 @@ for k in k_neighbors:
 intermediate_plots.real_v_imputed_basic(
             recon_mat=best_knn_recon,
             val_mat=val,
-            PXD="SMTG",
+            PXD="SMTG-tester",
             row_factors=opt_neighbors,
             col_factors=opt_neighbors,
             model_type="kNN", 
             log_transform=False,
             tail="valid",
-)    
+)   
+#checkpoint
+best_recon_knn_pd = pd.DataFrame(best_knn_recon)
+best_recon_knn_pd.to_csv("data/knn-recon-mcar.csv", index=None) 
 
 #####################################################################
 ### MISSFOREST IMPUTE
@@ -331,36 +343,35 @@ intermediate_plots.real_v_imputed_basic(
 ### We also need to benchmark relative to missForest. Also doing a 
 ### hyperparam search here. This is gonna be painfully slow. 
 #####################################################################
-# print(" ")
-# print("working on missForest")
+print(" ")
+print("working on missForest")
 
-# best_mf_loss = np.inf 
-# opt_trees = 0
+best_mf_loss = np.inf 
+opt_trees = 0
 
-# for n_tree in n_trees:
-#     mf_recon = fit_missForest(train, n_tree, max_iters_mf)
-#     mf_loss = util_functions.mse_func_np(mf_recon, val)
+for n_tree in n_trees:
+    mf_recon = fit_missForest(train, n_tree, max_iters_mf)
+    mf_loss = util_functions.mse_func_np(mf_recon, val)
 
-#     if mf_loss < best_mf_loss:
-#         best_mf_loss = mf_loss 
-#         best_mf_recon = mf_recon 
-#         opt_trees = n_tree
+    if mf_loss < best_mf_loss:
+        best_mf_loss = mf_loss 
+        best_mf_recon = mf_recon 
+        opt_trees = n_tree
 
-# intermediate_plots.real_v_imputed_basic(
-#             recon_mat=best_mf_recon, 
-#             val_mat=val, 
-#             PXD="SMTG",
-#             row_factors=opt_trees,
-#             col_factors=opt_trees,
-#             model_type="missForest",
-#             log_transform=False,
-#             tail="valid",
-# )
+intermediate_plots.real_v_imputed_basic(
+            recon_mat=best_mf_recon, 
+            val_mat=val, 
+            PXD="SMTG-tester",
+            row_factors=opt_trees,
+            col_factors=opt_trees,
+            model_type="missForest",
+            log_transform=False,
+            tail="valid",
+)
 
-# # And write to csv. As a way of checkpointing, just because this step
-# 	# takes so damn long.
-# best_mf_recon_pd = pd.DataFrame(best_mf_recon)
-# best_mf_recon_pd.to_csv("data/smtg-missForest-recon.csv", index=None)
+# checkpoint
+best_mf_recon_pd = pd.DataFrame(best_mf_recon)
+best_mf_recon_pd.to_csv("data/missForest-recon-mcar.csv", index=None)
 
 #####################################################################
 ### MIN IMPUTE
@@ -379,6 +390,10 @@ min_recon[nan_idx] = np.take(col_min, nan_idx[1])
 
 # get MSE
 min_loss = util_functions.mse_func_np(min_recon, val)
+
+# checkpoint
+min_recon_pd = pd.DataFrame(min_recon)
+min_recon_pd.to_csv("data/sample-min-recon-mcar.csv", index=None)
 
 #####################################################################
 ### GAUSSIAN RANDOM SAMPLE IMPUTE
@@ -419,12 +434,16 @@ std_recon = np.abs(std_recon)
 # get MSE
 std_loss = util_functions.mse_func_np(std_recon, val)
 
+# checkpoint
+std_recon_pd = pd.DataFrame(std_recon)
+std_recon_pd.to_csv("data/gsample-recon-mcar.csv", index=None)
+
 #####################################################################
 ### PRECISION-RECALL CURVES
 ###
-### Generate Precision-Recall curves for the optimal NN and NMF 
-### models, at the task of reconstructing "ground truth" DE peptides
-### between tumor and non-tumor matrices. Save to png. 
+### Generate Precision-Recall curves for the optimized reconstruction
+### for each imputation method. The task is reconstructing ground truth
+### DE peptides between tumor and non-tumor matrices. Save to png. 
 #####################################################################
 print(" ")
 print("generating precision-recall plots")
@@ -438,8 +457,8 @@ cond1_recon_knn = best_knn_recon[:,0:cols_cutoff]
 cond2_recon_knn = best_knn_recon[:,cols_cutoff:]
 
 # for missForest
-# cond1_recon_mf = best_mf_recon[:,0:cols_cutoff]
-# cond2_recon_mf = best_mf_recon[:,cols_cutoff:]
+cond1_recon_mf = best_mf_recon[:,0:cols_cutoff]
+cond2_recon_mf = best_mf_recon[:,cols_cutoff:]
 
 # for min impute
 cond1_recon_min = min_recon[:,0:cols_cutoff]
@@ -451,6 +470,9 @@ cond2_recon_std = std_recon[:,cols_cutoff:]
 
 # for no impute
 no_impute_mat = train.copy()
+noimp_pd = pd.DataFrame(no_impute_mat)
+noimp_pd.to_csv("data/noimpute-recon-mcar.csv", index=False)
+
 cond1_noimp = no_impute_mat[:,0:cols_cutoff]
 cond2_noimp = no_impute_mat[:,cols_cutoff:]
 
@@ -462,9 +484,9 @@ r, cp_vals_nmf = util_functions.find_DE_peptides(
 r, cp_vals_knn = util_functions.find_DE_peptides(
                         cond1_recon_knn, cond2_recon_knn, 
                         correction, alpha_=alpha)
-# r, cp_vals_mf = util_functions.find_DE_peptides(
-#                       cond1_recon_mf, cond2_recon_mf, 
-#                       correction, alpha_=alpha)
+r, cp_vals_mf = util_functions.find_DE_peptides(
+                      cond1_recon_mf, cond2_recon_mf, 
+                      correction, alpha_=alpha)
 r, cp_vals_min = util_functions.find_DE_peptides(
                         cond1_recon_min, cond2_recon_min, 
                         correction, alpha_=alpha)
@@ -481,7 +503,7 @@ gt_labels = reject_null_gt.astype(float)
 # get the DE probabilities, for each model 
 prob_true_nmf = 1 - cp_vals_nmf
 prob_true_knn = 1 - cp_vals_knn
-# prob_true_mf = 1 - cp_vals_mf
+prob_true_mf = 1 - cp_vals_mf
 prob_true_min = 1 - cp_vals_min
 prob_true_std = 1 - cp_vals_std
 prob_true_noimp = 1 - cp_vals_noimp
@@ -491,8 +513,8 @@ pr_nmf, recall_nmf, t = precision_recall_curve(
                         y_true=gt_labels, probas_pred=prob_true_nmf)
 pr_knn, recall_knn, t = precision_recall_curve(
                         y_true=gt_labels, probas_pred=prob_true_knn)
-# pr_mf, recall_mf, t = precision_recall_curve(
-#                         y_true=gt_labels, probas_pred=prob_true_mf)
+pr_mf, recall_mf, t = precision_recall_curve(
+                        y_true=gt_labels, probas_pred=prob_true_mf)
 pr_min, recall_min, t = precision_recall_curve(
                         y_true=gt_labels, probas_pred=prob_true_min)
 pr_std, recall_std, t = precision_recall_curve(
@@ -503,21 +525,20 @@ pr_noimp, recall_noimp, t = precision_recall_curve(
 # get the AUCs
 nmf_auc = np.around(auc(recall_nmf, pr_nmf), 2)
 knn_auc = np.around(auc(recall_knn, pr_knn), 2)
-# mf_auc = np.around(auc(recall_mf, pr_mf), 2)
+mf_auc = np.around(auc(recall_mf, pr_mf), 2)
 min_auc = np.around(auc(recall_min, pr_min), 2)
 std_auc = np.around(auc(recall_std, pr_std), 2)
 noimp_auc = np.around(auc(recall_noimp, pr_noimp), 2)
 
 # plot
 plt.figure()
-
 plt.plot(
     recall_nmf, pr_nmf, label="NMF (" + str(nmf_auc) + ")")
 plt.plot(
   recall_knn, pr_knn, label="kNN (" + str(knn_auc) + ")")
-# plt.plot(
-#     recall_mf, pr_mf, 
-#     label="missForest (" + str(mf_auc) + ")")
+plt.plot(
+    recall_mf, pr_mf, 
+    label="missForest (" + str(mf_auc) + ")")
 plt.plot(
     recall_min, pr_min, 
     label="Sample min (" + str(min_auc) + ")")
@@ -531,12 +552,11 @@ plt.plot(
 plt.legend(bbox_to_anchor=(1.0, 1.0))
 plt.xlabel("recall")
 plt.ylabel("precision")
-plt.title("MCAR", pad=20)
+plt.title("MNAR", pad=20, size=24)
 
 plt.savefig(
-    "logs/DE-experiment-MCAR-nomf1.png", dpi=250, bbox_inches="tight"
+    "logs/DE-experiment-MNAR-0.5valid.png", dpi=250, bbox_inches="tight"
 )
 
 print(" ")
 print("done!")
-

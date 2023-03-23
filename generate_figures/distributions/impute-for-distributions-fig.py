@@ -1,16 +1,10 @@
 """
-TRADITIONAL-EVAL
-1.30.23
+IMPUTE-FOR-DISTRIBUTIONS-FIG
+3.6.23
 
-Impute a bunch of peptide quants datasets with our five imputation
-methods and plot the reconstruction errors in some "traditional"
-ML-style manner. The only difference between this script and the
-traditional-eval-scratch notebook is that here were doing this
-for more peptide quants datasets. We have the advantage of being
-able to run this script as a screen sessions. We can also run
-missForest here, which will never work from a jupyter notebook.
-
-Lets just focus on MCAR partition for now. 
+Impute the four datasets used in the mean-x-variance figure with
+our five imputation methods. Does imputation change the distribution
+of the means and variances? 
 """
 import pandas as pd
 import numpy as np
@@ -45,14 +39,14 @@ pal = sns.color_palette()
 ###  CONFIGS  #######################################################
 #####################################################################
 # MCAR partitioning params
-val_frac = 0.3
+val_frac = 0.2
 test_frac = 0.0
-min_present = 1
+min_present = 4
 
 # MNAR partition params
 q_anchor=0.3   
-t_std=0.35
-brnl_prob=0.4
+t_std=0.4
+brnl_prob=0.5
 
 # NMF model params
 n_factors = 4              # 4 is default
@@ -82,16 +76,8 @@ full_path = \
     "/net/noble/vol2/home/lincolnh/code/"\
     "2021_ljharris_ms-impute/data/peptides-data/"
 
-# the peptides
-# pxds = ["PXD013792",
-#         "PXD014156", 
-#         "Satpathy2020sub", 
-#         "Petralia2020sub",
-#         "PXD006348", 
-#         "PXD011961",
-#         "PXD014525"
-# ]
-pxds = ["PXD034525", "PXD014815"]
+# the (PXDs)
+pxds = ["PXD014525", "PXD034525", "PXD016079", "PXD006109"]
 
 #####################################################################
 ###  HELPER FUNCTIONS  ##############################################
@@ -325,22 +311,22 @@ for pxd in pxds:
     quants = np.array(quants_raw)
     
     # MCAR partition 
-    # train, val, test = util_functions.split(
-    #                                 quants, 
-    #                                 val_frac=val_frac,
-    #                                 test_frac=test_frac, 
-    #                                 min_present=min_present,
-    #                                 random_state=split_rand_state,
-    # )
-    # MNAR partition 
-    train, val = util_functions.MNAR_partition_thresholds_matrix(
-                                        quants, 
-                                        q_anchor=q_anchor, 
-                                        t_std=t_std, 
-                                        brnl_prob=brnl_prob, 
-                                        min_pres=min_present,
-                                        rand_state=split_rand_state,
+    train, val, test = util_functions.split(
+                                    quants, 
+                                    val_frac=val_frac,
+                                    test_frac=test_frac, 
+                                    min_present=min_present,
+                                    random_state=split_rand_state,
     )
+    # MNAR partition 
+    # train, val = util_functions.MNAR_partition_thresholds_matrix(
+    #                                     quants, 
+    #                                     q_anchor=q_anchor, 
+    #                                     t_std=t_std, 
+    #                                     brnl_prob=brnl_prob, 
+    #                                     min_pres=min_present,
+    #                                     rand_state=split_rand_state,
+    # )
     
     # take a look at the MV fractions in the three sets
     orig_mv_frac = np.count_nonzero(np.isnan(quants)) / quants.size
@@ -351,88 +337,31 @@ for pxd in pxds:
     print("mv frac train: ", np.around(train_mv_frac, decimals=3))
     print("mv frac validation: ", np.around(val_mv_frac, decimals=3))
     
-    # impute with each method
+    # impute the training set with each method
     nmf_recon = nmf_impute(train, val)
     knn_recon = kNN_impute(train)
     smin_recon = sample_min_impute(train)
     gsample_recon = gaussian_sample_impute(train)
     mf_recon = missForest_impute(train)
-    
-    # get reconstruction errors
-    nmf_val_mse = mse_func(nmf_recon, val)
-    knn_val_mse = mse_func(knn_recon, val)
-    smin_val_mse = mse_func(smin_recon, val)
-    gsample_val_mse = mse_func(gsample_recon, val)
-    mf_val_mse = mse_func(mf_recon, val)
-    
-    res = {
-        "pxd" : pxd, 
-        "NMF MSE" : nmf_val_mse,
-        "KNN MSE" : knn_val_mse,
-        "Sample min MSE" : smin_val_mse,
-        "Gaussian sample MSE" : gsample_val_mse,
-        "missForest MSE" : mf_val_mse
-    }
-    
-    recon_err_mcar = recon_err_mcar.append(res, ignore_index=True)
 
-# save the reconstruction errrors df -- checkpointing
-recon_err_mcar.to_csv(
-    "output/recon-errors-MNAR-w-DIA.csv", index=False)
+    # convert to pandas (for the sake of writing)
+    nmf_recon_pd = pd.DataFrame(nmf_recon)
+    knn_recon_pd = pd.DataFrame(knn_recon)
+    smin_recon_pd = pd.DataFrame(smin_recon)
+    gsample_recon_pd = pd.DataFrame(gsample_recon)
+    mf_recon_pd = pd.DataFrame(mf_recon)
+
+    # save the imputed matrices
+    nmf_recon_pd.to_csv(
+        "output/" + pxd + "-nmf-imputed.csv", index=None)
+    knn_recon_pd.to_csv(
+       "output/" + pxd + "-knn-imputed.csv", index=None)
+    smin_recon_pd.to_csv(
+        "output/" + pxd + "-smin-imputed.csv", index=None)
+    gsample_recon_pd.to_csv(
+        "output/" + pxd + "-gsample-imputed.csv", index=None)
+    mf_recon_pd.to_csv(
+       "output/" + pxd + "-mf-imputed.csv", index=None)
+
 print(" ")
 print("done with impute!")
-
-#####################################################################
-###  PLOTTING  ######################################################
-#####################################################################
-# switch up the column names
-recon_err_mcar.columns = [
-		"PXD", "NMF", "KNN", "Sample Min", 
-		"Gaussian Sample", "missForest"]
-
-# melt
-recon_mcar_melted = recon_err_mcar.melt(id_vars="PXD")
-recon_mcar_melted.columns = ["PXD", "Method", "MSE"]
-# recon_mcar_melted
-
-# get logged MSE
-log_mse = np.log(recon_mcar_melted["MSE"])
-recon_mcar_melted["Log MSE"] = log_mse
-
-#####################################################################
-### SWARMPLOT -- METHOD VS MSE  #####################################
-#####################################################################
-plt.figure(figsize=(5,5))
-
-#sns.swarmplot(
-#	data=recon_mcar_melted, x="MSE", y="Method", hue="PXD", size=9.0)
-sns.swarmplot(
-	data=recon_mcar_melted, 
-	x="Log MSE", y="Method", hue="PXD", size=9.0)
-
-plt.title("MCAR", pad=20)
-plt.legend(bbox_to_anchor=(1.0, 1.0))
-plt.xlabel("Validation MSE (log)", labelpad=10)
-plt.ylabel("", labelpad=10)
-#plt.savefig("swarm-method-v-mse.png", dpi=250, bbox_inches="tight")
-
-#####################################################################
-### SWARMPLOT -- MSE VS DATASET  ####################################
-#####################################################################
-plt.figure(figsize=(5,5))
-
-#fig = sns.swarmplot(
-#	data=recon_mcar_melted, x="PXD", y="MSE", hue="Method", size=9.0)
-fig = sns.swarmplot(
-	data=recon_mcar_melted, 
-	x="PXD", y="Log MSE", hue="Method", size=9.0)
-
-plt.legend(bbox_to_anchor=(1.0, 1.0), title="Imputation Method")
-plt.xlabel("Dataset", labelpad=10)
-plt.ylabel("Validation MSE (log)", labelpad=10)
-plt.title("MCAR", pad=20)
-
-# hide the xtick labels
-fig.xaxis.set_ticklabels([])
-
-#plt.savefig("swarm-mse-vs-dataset.png", dpi=250, bbox_inches="tight")

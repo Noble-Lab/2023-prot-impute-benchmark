@@ -79,7 +79,7 @@ Most proteomics imputation method benchmarking studies use relatively simple per
   \begin{center}
     \includegraphics[width=0.6\textwidth]{figures/imp-lit-seq-results-update1.png}
   \end{center}
-  \caption{{\bf Citation counts for the most commonly used proteomics imputation methods.} Results of a literature survey of \textit{Journal of Proteome Research} articles from January, 2019 -- January, 2023 are shown. Methods labeled ``other'' appear in just a single publication, and refer to the imp4p and QRLIC R packages, as well as methods based on Euclidean distances and randomly drawing from the entire peptide intensity range.  The full results of this literature search, including the names and DOIs of the identified studies, are included as Supplementary File 1. }
+  \caption{{\bf Citation counts for the most commonly used proteomics imputation methods.} Results of a literature survey of \textit{Journal of Proteome Research} articles from January, 2019 -- January, 2023 are shown. Methods labeled ``other'' appear in just a single publication, and refer to the imp4p and QRLIC R packages, as well as methods based on Euclidean distances and randomly drawing from the entire peptide intensity range.  The full results of this literature search, including the names and DOIs of the identified studies, are included as Data 1. }
   \label{fig:citation-counts}
 \end{figure} 
 
@@ -93,7 +93,7 @@ We also demonstrate that peptide quantifications exhibit greater than expected v
 
 \subsection{Data sets}
 
-For this study, we used 12 public quantitative proteomics data sets (Table \ref{tab:data-description}). Nine of the 12 data sets were accessed via the Proteomics Identification Database (PRIDE, \url{https://www.ebi.ac.uk/pride/}) \cite{PRIDE}, and are indicated with their ProteomeXchange (PXD) labels \cite{ProteomeXchange}. The remaining two data sets were obtained from the National Cancer Institute's Clinical Proteomic Tumor Analysis Consortium (CPTAC) data portal (\url{https://proteomic.datacommons.cancer.gov/pdc/}) \cite{CPTAC}. A complete list of the files obtained for each experiment is provided in Supplementary File 2. 
+For this study, we used 12 public quantitative proteomics data sets (Table \ref{tab:data-description}). Nine of the 12 data sets were accessed via the Proteomics Identification Database (PRIDE, \url{https://www.ebi.ac.uk/pride/}) \cite{PRIDE}, and are indicated with their ProteomeXchange (PXD) labels \cite{ProteomeXchange}. The remaining two data sets were obtained from the National Cancer Institute's Clinical Proteomic Tumor Analysis Consortium (CPTAC) data portal (\url{https://proteomic.datacommons.cancer.gov/pdc/}) \cite{CPTAC}. A complete list of the files obtained for each experiment is provided in Data 2. 
 
 For experiments processed with MaxQuant, we used the provided ``peptides.txt'' files to generate peptide-by-run intensity matrices by selecting only the ``Sequence'' and ``Intensity'' columns. For experiments not processed with MaxQuant, we obtained peptide-spectrum match files and converted them to matrix format with custom scripts (available at \url{https://github.com/Noble-Lab/2023-prot-impute-benchmark}). The peptide quantification matrices from the two CPTAC studies were large (S047: 110k peptides $\times$ 226 samples; S051: 291k peptides $\times$ 35 samples). For efficiency, we downsampled both matrices by randomly selecting 40,000 peptides and 30 runs from each.
 

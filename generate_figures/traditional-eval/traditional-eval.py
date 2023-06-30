@@ -28,10 +28,10 @@ import warnings
 warnings.filterwarnings("ignore", category=UserWarning)
 
 # import my modules
-sys.path.append('../../../../bin/')
+sys.path.append('../../bin/')
+sys.path.append('../../bin/nmf_model/')
 from models.linear import GradNMFImputer
-import util_functions
-import intermediate_plots
+import utils
 
 # for missForest:
 from rpy2.robjects.packages import importr

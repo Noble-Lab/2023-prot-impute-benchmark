@@ -2,9 +2,6 @@
 UTILS
 
 This module contains commonly used utility and plotting functions. 
-Right now I'm just setting output png paths ad hoc in 
-`plt_obs_vs_imputed` and `plot_loss_curves_utils`. At some point it 
-would be nice to robustify these plotting functions a bit.
 """
 import numpy as np
 import pandas as pd
@@ -12,9 +9,6 @@ import matplotlib.pyplot as plt
 import seaborn as sns
 
 import sys
-sys.path.append('../../bin/')
-from data_loaders import FactorizationDataset
-from scalers import STDScaler
 
 # plotting templates
 sns.set(context="talk", style="ticks") 
@@ -84,12 +78,7 @@ def plt_obs_vs_imputed(recon_mat, orig_mat, log_scale=False):
 
     plt.minorticks_off()
 
-    #plt.show()
-    plt.savefig(
-        "transformer-nmf-obs-vs-imputed.png", 
-        dpi=250, 
-        bbox_inches="tight",
-    )
+    plt.show()
     plt.close()
     return
 
@@ -300,103 +289,6 @@ def mse_func(x_mat, y_mat):
 
     return mse / np.sum(~missing)
 
-def plot_partition_distributions(
-        train_mat, 
-        train_loader, 
-        val_loader, 
-        outstr=None, 
-        save_fig=False,
-):
-    """
-    Want to see what the partitions look like, exactly as the MODEL
-    sees them. This function plot the distributions of the training
-    set and the train and validation sets after mini-batch selection.
-
-    Parameters
-    ----------
-    train_mat, val_mat : np.ndarray, 
-        The training and validation matrices, respectively. Logged.
-    outstr : str, optional
-        What to call the output file (.png)?
-    save_fig : bool, optional
-        Write the figure to a png? 
-
-    Returns
-    ----------
-    none
-    """
-    # get all of the X_ijs in both loaders
-    train_targets = np.array([])
-    for locs, target in train_loader:
-        locs = locs.detach().cpu().numpy()
-        target = target.detach().cpu().numpy()
-        train_targets = np.append(train_targets, target)
-
-    valid_targets = np.array([])
-    for locs, target in val_loader:
-        locs = locs.detach().cpu().numpy()
-        target = target.detach().cpu().numpy()
-        valid_targets = np.append(valid_targets, target)
-
-    # PLOT THE DISTRIBUTIONS
-    # flatten
-    train_mat = np.array(train_mat)
-    train_rav = train_mat.ravel()
-
-    # get present values from the training matrix
-    train_nans = np.isnan(train_rav)
-    train_present = train_rav[~train_nans]
-
-    # plot
-    plt.figure()
-    plt.hist(
-        train_present, 
-        density=False, 
-        bins=60, 
-        linewidth=0.01, 
-        color='firebrick', 
-        edgecolor='firebrick', 
-        alpha=1.0, 
-        label="Train",
-    )
-    plt.hist(
-        train_targets, 
-        density=False, 
-        bins=60, 
-        linewidth=0.01, 
-        color='olivedrab', 
-        edgecolor='olivedrab', 
-        alpha=0.8, 
-        label="Train MB",
-    )
-    plt.hist(
-        valid_targets, 
-        density=False, 
-        bins=30, 
-        linewidth=0.01, 
-        color='gold', 
-        edgecolor='gold', 
-        alpha=0.7, 
-        label="Valid MB",
-    )
-    plt.minorticks_off()
-
-    plt.xlabel("Intensity", labelpad=12)
-    plt.ylabel("Counts", labelpad=12)
-
-    leg = plt.legend()
-    for lh in leg.legendHandles: 
-        lh.set_alpha(1)
-
-    #plt.ticklabel_format(style="sci", axis="x", scilimits=(0,0))
-
-    if save_fig:
-        plt.savefig(outstr + ".png", dpi=250, bbox_inches="tight")
-    else:
-        plt.show()
-    plt.close()
-    return
-
 def plot_loss_curves_utils(model):
     """ 
     Generate model loss vs training epoch plot. For both training
@@ -423,12 +315,7 @@ def plot_loss_curves_utils(model):
     plt.xlabel("Epochs")
     plt.ylabel("MSE")
 
-    #plt.show()
-    plt.savefig(
-        "nmf-transformer-model-loss-curves.png", 
-        dpi=200, 
-        bbox_inches="tight",
-    )
+    plt.show()
     plt.close()
 
     return

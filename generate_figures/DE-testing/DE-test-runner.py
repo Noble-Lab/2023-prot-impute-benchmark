@@ -37,16 +37,11 @@ from sklearn.metrics import precision_recall_curve
 from rpy2.robjects.packages import importr
 from rpy2.robjects import numpy2ri, r
 
-# suppressing this CUDA initialization warning I always get
-    # this could be dangerous
-import warnings
-warnings.filterwarnings("ignore", category=UserWarning)
-
 # import my modules
-sys.path.append('../../../../bin/')
+sys.path.append('../../bin/')
+sys.path.append('../../bin/nmf_model/')
 from models.linear import GradNMFImputer
-import util_functions
-import intermediate_plots
+import utils
 
 # plotting templates
 sns.set(context="talk", style="ticks") 

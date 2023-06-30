@@ -20,7 +20,6 @@ the same script as `DE-test-simple.py`, only with some data wrangling
 at the end to make the imputed matrices compatiable with
 `calculate-loq.py`. The other difference is that the input dataset is
 the yeast calibration curves instead of the SMTG dataset. 
-
 """
 import pandas as pd
 import numpy as np
@@ -35,10 +34,11 @@ from sklearn.impute import KNNImputer
 from rpy2.robjects.packages import importr
 from rpy2.robjects import numpy2ri
 
-sys.path.append('../../../../bin/')
-from models.linear import GradNMFImputer, DNNImputer
-import util_functions
-import intermediate_plots
+# import my modules
+sys.path.append('../../bin/')
+sys.path.append('../../bin/nmf_model/')
+from models.linear import GradNMFImputer
+import utils
 
 # suppressing this CUDA initialization warning I always get
     # this could be dangerous

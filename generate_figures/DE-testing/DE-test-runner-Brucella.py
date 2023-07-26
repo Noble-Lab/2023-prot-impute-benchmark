@@ -1,9 +1,10 @@
 """
-DE-TEST-RUNNER-SMTG-PROTEINS
-6.30.23
+DE-TEST-RUNNER-BRUCELLA
+7.6.23
 
-Running the differential expression test on the MacCoss lab's 
-SMTG AD data again, but this time on protein-level quants. We're
+Same thing, except that here were running the differential 
+expression test for PXD006348 (Brucella), as this is a label-free
+DDA dataset. For the sake of manuscript revisions. We're
 not running the NN model here, rather just NMF. But we are still 
 doing full hyperparam searches for NMF, kNN and missForest. 
 
@@ -31,11 +32,6 @@ from sklearn.metrics import precision_recall_curve
 from rpy2.robjects.packages import importr
 from rpy2.robjects import numpy2ri, r
 
-# suppressing this CUDA initialization warning I always get
-    # this could be dangerous
-import warnings
-warnings.filterwarnings("ignore", category=UserWarning)
-
 # import my modules
 sys.path.append('../../../bin/')
 from models.linear import GradNMFImputer
@@ -50,22 +46,22 @@ sns.set_palette("tab10")
 #### CONFIGS 	
 #####################################################################
 # the datasets
-cond1_path = "data/SMTG-ADD-protein-quants.csv"
-cond2_path = "data/SMTG-HCF-low-protein-quants.csv"
+cond1_path = "data/b-abortus-quants.csv"
+cond2_path = "data/b-melitensis-quants.csv"
 
 # original data filtering params
-min_pres_orig = 9 # when selecting peptides to include in the DE 
+min_pres_orig = 5 # when selecting peptides to include in the DE 
                 # analysis, what is the minimum number of present 
                 # observations? 
 
 # partitioning params
-val_frac = 0.3
+val_frac = 0.25
 test_frac = 0.0
 # setting this to 0 ensures that no peptides will be filtered out
 min_present = 0     # during partitioning
-q_anchor=0.3  # these three for MNAR partition 
+q_anchor=0.25  # these three for MNAR partition 
 t_std=1.0
-brnl_prob=0.8
+brnl_prob=0.77
 
 # NMF model params
 n_factors = [1,2,4,8,16,32]   # [1,2,4,8,16,32] is default
@@ -175,10 +171,10 @@ cond2_df = pd.read_csv(cond2_path)
 
 # # get the list of peptide IDs
 #     # these will be the same for the two datasets
-peptide_ids = np.array(cond1_df["pids"])
+peptide_ids = np.array(cond1_df["Sequence"])
 
 # now remove the peptide ID columns
-to_remove = ["pids"]
+to_remove = ["Sequence"]
 cond1_df = cond1_df.drop(to_remove, axis=1)
 cond2_df = cond2_df.drop(to_remove, axis=1)
 
@@ -186,7 +182,18 @@ cond2_df = cond2_df.drop(to_remove, axis=1)
 cond1_quants = np.array(cond1_df)
 cond2_quants = np.array(cond2_df)
 
-# subset down to just peptides with a low missinngess fraction
+# get rid of the zeros
+cond1_quants = np.float32(cond1_quants)
+cond2_quants = np.float32(cond2_quants)
+
+cond1_quants[cond1_quants == 0.0] = np.nan
+cond2_quants[cond2_quants == 0.0] = np.nan
+
+# log the quants
+cond1_quants = np.log(cond1_quants)
+cond2_quants = np.log(cond2_quants)
+
+# subset down to just peptides with a low missingness fraction
     # the missingness threshold is defined in the configs section
 num_present_c1 = np.sum(~np.isnan(cond1_quants), axis=1)
 discard = num_present_c1 < min_pres_orig
@@ -292,8 +299,7 @@ for factors in n_factors:
 
 	# get the reconstruction loss, for valid and train sets
 	val_loss_curr = util_functions.mse_func_np(nmf_recon, val)
-	train_loss_curr = \
-        util_functions.mse_func_np(nmf_full_recon, train)
+	train_loss_curr = util_functions.mse_func_np(nmf_full_recon, train)
 
 	if val_loss_curr < best_loss_nmf:
 		best_loss_nmf = val_loss_curr
@@ -335,7 +341,7 @@ intermediate_plots.real_v_imputed_basic(
 #checkpoint
 best_recon_nmf_pd = pd.DataFrame(best_recon_nmf)
 best_recon_nmf_pd.to_csv(
-    "out/nmf-smtg-prot-recon-mcar.csv", index=None)
+    "out/nmf-bruce-recon-mnar.csv", index=None)
 
 #####################################################################
 ### KNN IMPUTE
@@ -372,7 +378,7 @@ intermediate_plots.real_v_imputed_basic(
 #checkpoint
 best_recon_knn_pd = pd.DataFrame(best_knn_recon)
 best_recon_knn_pd.to_csv(
-    "out/knn-smtg-prot-recon-mcar.csv", index=None) 
+    "out/knn-bruce-recon-mnar.csv", index=None)
 
 #####################################################################
 ### MISSFOREST IMPUTE
@@ -409,7 +415,7 @@ intermediate_plots.real_v_imputed_basic(
 # checkpoint
 best_mf_recon_pd = pd.DataFrame(best_mf_recon)
 best_mf_recon_pd.to_csv(
-   "out/missForest-smtg-prot-recon-mcar.csv", index=None)
+    "out/missForest-bruce-recon-mnar.csv", index=None)
 
 #####################################################################
 ### MIN IMPUTE
@@ -429,7 +435,7 @@ smin_recon[nan_idx] = np.take(col_min, nan_idx[1])
 # checkpoint
 smin_recon_pd = pd.DataFrame(smin_recon)
 smin_recon_pd.to_csv(
-    "out/sample-min-smtg-prot-recon-mcar.csv", index=None)
+    "out/smin-bruce-recon-mnar.csv", index=None)
 
 #####################################################################
 ### GAUSSIAN RANDOM SAMPLE IMPUTE
@@ -469,7 +475,7 @@ gsample_recon = np.abs(gsample_recon)
 # checkpoint
 gsample_recon_pd = pd.DataFrame(gsample_recon)
 gsample_recon_pd.to_csv(
-    "out/gsample-smtg-prot-recon-mcar.csv", index=None)
+    "out/gsample-bruce-recon-mnar.csv", index=None)
 
 #####################################################################
 ### PRECISION-RECALL CURVES
@@ -504,7 +510,8 @@ cond2_recon_gsample = gsample_recon[:,cols_cutoff:]
 # for no impute
 no_impute_mat = train.copy()
 noimp_pd = pd.DataFrame(no_impute_mat)
-noimp_pd.to_csv("out/noimpute-smtg-prot-recon-mcar.csv", index=False)
+noimp_pd.to_csv(
+    "out/noimp-bruce-recon-mnar.csv", index=False)
 
 cond1_noimp = no_impute_mat[:,0:cols_cutoff]
 cond2_noimp = no_impute_mat[:,cols_cutoff:]
@@ -580,10 +587,10 @@ plt.xlabel("recall")
 plt.ylabel("precision")
 plt.title("MCAR", pad=20, size=24)
 
-plt.savefig(
-    "out/DE-experiment-SMTG-proteins-MCAR.png",
-    dpi=250, 
-    bbox_inches="tight",
-)
+# plt.savefig(
+#     "out/DE-experiment-Petralia-MCAR.png",
+#     dpi=250, 
+#     bbox_inches="tight",
+# )
 print(" ")
 print("done!")

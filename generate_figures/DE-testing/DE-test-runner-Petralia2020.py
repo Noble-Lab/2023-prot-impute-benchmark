@@ -59,16 +59,16 @@ min_pres_orig = 16 # when selecting peptides to include in the DE
                 # observations? 
 
 # partitioning params
-val_frac = 0.2
+val_frac = 0.35
 test_frac = 0.0
 # setting this to 0 ensures that no peptides will be filtered out
 min_present = 0     # during partitioning
 q_anchor=0.01  # these three for MNAR partition 
 t_std=0.2
-brnl_prob=0.45
+brnl_prob=0.48
 
 # NMF model params
-n_factors = [1]   # [1,2,4,8,16,32] is default
+n_factors = [1,2,4,8,16,32]   # [1,2,4,8,16,32] is default
 tolerance = 0.0001            # 0.0001 is default
 max_epochs = 512             # 1000 is default
 learning_rate = 0.01          # 0.01 is default
@@ -76,7 +76,7 @@ batch_size = 128               # 64 is default
 loss_func = "MSE"
 
 # kNN impute params
-k_neighbors = [1] # [1,2,4,8,16,32] is default
+k_neighbors = [1,2,4,8,16,32] # [1,2,4,8,16,32] is default
 
 # missForest impute params
 n_trees = [100]               # [100] is default
@@ -185,6 +185,10 @@ cond2_df = cond2_df.drop(to_remove, axis=1)
 # convert to numpy arrays
 cond1_quants = np.array(cond1_df)
 cond2_quants = np.array(cond2_df)
+
+# log the quants?
+cond1_quants = np.log(cond1_quants)
+cond2_quants = np.log(cond2_quants)
 
 # subset down to just peptides with a low missinngess fraction
     # the missingness threshold is defined in the configs section
@@ -333,7 +337,8 @@ intermediate_plots.real_v_imputed_basic(
 )
 #checkpoint
 best_recon_nmf_pd = pd.DataFrame(best_recon_nmf)
-#best_recon_nmf_pd.to_csv("out/nmf-recon-mcar.csv", index=None)
+best_recon_nmf_pd.to_csv(
+    "out/nmf-cptac-recon-mnar.csv", index=None)
 
 #####################################################################
 ### KNN IMPUTE
@@ -369,7 +374,8 @@ intermediate_plots.real_v_imputed_basic(
 )   
 #checkpoint
 best_recon_knn_pd = pd.DataFrame(best_knn_recon)
-#best_recon_knn_pd.to_csv("out/knn-recon-mcar.csv", index=None) 
+best_recon_knn_pd.to_csv(
+    "out/knn-cptac-recon-mnar.csv", index=None)
 
 #####################################################################
 ### MISSFOREST IMPUTE
@@ -405,7 +411,8 @@ intermediate_plots.real_v_imputed_basic(
 
 # checkpoint
 best_mf_recon_pd = pd.DataFrame(best_mf_recon)
-best_mf_recon_pd.to_csv("out/missForest-recon-mnar.csv", index=None)
+best_mf_recon_pd.to_csv(
+    "out/missForest-cptac-recon-mnar.csv", index=None)
 
 #####################################################################
 ### MIN IMPUTE
@@ -424,7 +431,8 @@ smin_recon[nan_idx] = np.take(col_min, nan_idx[1])
 
 # checkpoint
 smin_recon_pd = pd.DataFrame(smin_recon)
-#smin_recon_pd.to_csv("out/sample-min-recon-mcar.csv", index=None)
+smin_recon_pd.to_csv(
+    "out/smin-cptac-recon-mnar.csv", index=None)
 
 #####################################################################
 ### GAUSSIAN RANDOM SAMPLE IMPUTE
@@ -463,7 +471,8 @@ gsample_recon = np.abs(gsample_recon)
 
 # checkpoint
 gsample_recon_pd = pd.DataFrame(gsample_recon)
-#gsample_recon_pd.to_csv("out/gsample-recon-mcar.csv", index=None)
+gsample_recon_pd.to_csv(
+    "out/gsample-cptac-recon-mnar.csv", index=None)
 
 #####################################################################
 ### PRECISION-RECALL CURVES
@@ -498,7 +507,8 @@ cond2_recon_gsample = gsample_recon[:,cols_cutoff:]
 # for no impute
 no_impute_mat = train.copy()
 noimp_pd = pd.DataFrame(no_impute_mat)
-#noimp_pd.to_csv("out/noimpute-recon-mcar.csv", index=False)
+noimp_pd.to_csv(
+    "out/noimp-cptac-recon-mnar.csv", index=False)
 
 cond1_noimp = no_impute_mat[:,0:cols_cutoff]
 cond2_noimp = no_impute_mat[:,cols_cutoff:]
